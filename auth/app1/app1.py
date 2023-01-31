@@ -56,3 +56,6 @@ class Validate(Resource):
             return "not authorized", 403
         return decoded, 200
 
+
+# for refresh token logic create a similar token like access but its expiry wil be one day and payload will be less. so ogin api will return 2 tokens one is access and another one is refresh token.
+# on refresh token request we will validate refresh token and provide new access token with old refresh token.
