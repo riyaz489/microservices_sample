@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: auth-configmap
+data:
+  DB_HOST: host.minikube.internal
+  DB_USER: auth_user
+  DB_PORT: "5432"
+  DB_ADMIN: test
+  DB_NAME: auth
+  FLASK_CONFIG_ENV: config.StagingConfig
+

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: gateway-configmap
+data:
+  # host.minikube.internal represent host machine localhost
+  # for testing purpose we are running mongo and postgres in our local machine, in prod these will be aws/azure services
+  DB_HOST: host.minikube.internal
+  DB_USER: mongoadmin
+  DB_PORT: "27017"
+  DB_NAME: videos
+  FLASK_CONFIG_ENV: config.StagingConfig
+  AUTH_SVC_ADDRESS: "auth:5000"
+

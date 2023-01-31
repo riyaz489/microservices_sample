@@ -1,0 +1,106 @@
+openapi: 3.0.1
+info:
+  title: Application
+  description: Generated at 01/02/2023 01:52:55. This is the swagger 
+    ui based on the open api 3.0 specification of the Application
+  version: 1.0.0 created by the flask swagger generator.
+externalDocs:
+  description: Find out more about Swagger
+  url: 'http://swagger.io'
+servers:
+  - url: '/'
+paths:
+  '/login':
+    post:
+      tags:
+      - app1
+      operationId: 'login'
+      requestBody:
+        $ref: '#/components/requestBodies/login_request_body' 
+      responses:
+        '200':
+          $ref: '#/components/responses/login_response'
+  '/upload':
+    post:
+      tags:
+      - app1
+      operationId: 'upload'
+  '/list':
+    get:
+      tags:
+      - app1
+      operationId: 'list_audios'
+  '/download':
+    get:
+      tags:
+      - app1
+      operationId: 'download'
+      requestBody:
+        $ref: '#/components/requestBodies/download_request_body' 
+      responses:
+        '200':
+          $ref: '#/components/responses/download_response'
+      security:
+        - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  requestBodies:
+    login_request_body:
+      description: None
+      required: True
+      content:
+         application/json:
+             schema:
+                 $ref: '#/components/schemas/login'
+    download_request_body:
+      description: None
+      required: True
+      content:
+         application/json:
+             schema:
+                 $ref: '#/components/schemas/download'
+  responses:
+    login_response:
+      description: login response
+      content:
+         application/json:
+             schema:
+                 $ref: '#/components/schemas/login_response_schema'
+    download_response:
+      description: download response
+      content:
+         application/json:
+             schema:
+                 $ref: '#/components/schemas/download_response_schema'
+  schemas:
+    login:
+      type: object
+      properties:
+        username:
+          type: string  
+          example: test  
+        password:
+          type: string  
+          example: pass  
+    login_response_schema:
+      type: object
+      properties:
+        access_token:
+          type: string  
+          example: test  
+    download:
+      type: object
+      properties:
+        fid:
+          type: string  
+          example: file id  
+    download_response_schema:
+      type: object
+      properties:
+        file:
+          type: string  
+          example: sample content  

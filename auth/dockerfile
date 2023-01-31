@@ -1,0 +1,47 @@
+FROM  python:3.10.9-slim-bullseye
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests\
+     build-essential libpq-dev python3-dev  postgresql-client \
+    && pip install --no-cache-dir --upgrade pip
+
+WORKDIR /app
+COPY ./requirements.txt .
+RUN pip install --no-cache-dir --requirement ./requirements.txt
+COPY . /app
+# it's not best practice to keep secrets in image(but running container can have them)
+# to use secrets only for build we have --secret option in docker build
+# and below command will mount a file loaded with secrets, which will be deleted after build
+# docker build --secret id=FILENAME,src=LOCAL_FILENAME
+# to use secrets we need to enable docker build kit (which is done by `export DOCKER_BUILDKIT=1`)
+# id will match with below command and src will be file path in host machine
+
+# RUN --mount=type=secret,id=_env,dst=/etc/secrets/_env.env . /etc/secrets/_env.env && psql -h $DB_HOST -p 5432 -U $DB_USER -d $DB_NAME  -a -f ./init.sql
+
+# commands with --mount=type... prefix can use the secret.without this mount we can't . also we can use multiple secrets
+# (secrets with different id's )in single dockerfile.
+# . /etc/secrets... is used to set env vars from .env file. it is equivalent to `source` command in bash,
+# but docker uses shell
+
+# another way using hot env_var
+# export MYSECRET=theverysecretpassword
+# $ export DOCKER_BUILDKIT=1
+# $ docker build --secret id=mysecret,env=MYSECRET .
+
+# if you don't have secrets in your local then run pythn/bash script to load secrets,
+# from some vault to your host env-vars or write to some .env file, before doing docker build
+# if you want to set some config to env vars and want it persistant after image build, then use env in docker file
+# or write some python or bash file to set all config vars to env var from .env file
+# or simply move those commands to start_up.sh,as in container those secrets will be present as env vars.
+
+# note: during build time docker is unable to resolve to host.docker.internal
+# as it is not added to host file yet.
+
+# RUN flask db upgrade
+# RUN --mount=type=secret,id=_env,dst=/etc/secrets/_env.env . /etc/secrets/_env.env && flask create_admin -n=$DummyAdmin -p=$DummyAdminPass
+
+EXPOSE 5000
+RUN chmod +x start_up.sh
+ENV FLASK_APP=server:app
+ENV PYTHONPATH=.
+CMD ["./start_up.sh"]

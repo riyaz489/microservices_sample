@@ -1,0 +1,90 @@
+K9s to view cluster detail in style inside cmd
+
+postgres command = docker run --name postgres_test2 -p 5432:5432 -e POSTGRES_PASSWORD=test123 -e POSTGRES_USER=test postgres
+
+
+set PGPASSWORD=test123
+psql -h host -U username -d myDataBase -a -f myInsertFile
+
+note: flask migrate uses alembic behind the scenese, flask migrate is just a simple wrapper
+# it will use our flask app conncetion with db to run migrations
+
+# set cwd directory to config and server path
+set PYTHONPATH=. 
+flask db init
+flask db migrate -m "msg"
+flask db upgrade
+
+
+set table=t1
+echo %table%
+
+#  to secfy ain server file
+set FLASK_APP=server.py
+
+REASSIGN OWNED BY myuser TO postgres;
+DROP OWNED BY myuser;
+DROP USER myuser;
+
+
+
+docker run -e POSTGRES_PASSWORD=test123 -e POSTGRES_USER=test -d --rm -p 5432:5432 postges 
+
+docker run -e MONGO_INITDB_ROOT_USERNAME=mongoadmin -e MONGO_INITDB_ROOT_PASSWORD=secret -d --rm -p 27017:27017 mongo 
+
+
+docker run -d --rm -p 5000:5000 auth gunicorn --bind 0.0.0.0:5000 server:app --log-file /app/logs/gunicorn.log   --log-level DEBUG   --reload
+
+host.docker.internal will point to localhost of host machine (If we want to connect from a container to a service on the host)
+or we can set --network="host" in your docker run, then contianer localhost will point to host localhost
+best practice is to use bridge only
+
+
+set DOCKER_BUILDKIT=1 
+docker build -t auth --secret id=_env,src="C:\Users\riyaz\OneDrive\Desktop\Microservices Sample\auth\.env" --progress=plain .
+# prgoress plain to see dockerfile commands output
+
+docker tag auth riyaz489/auth:latest 
+
+docker push  riyaz489/auth:latest    
+
+docker tag gateway riyaz489/gateway:latest 
+
+docker push  riyaz489/gateway:latest 
+
+minikube stop
+minikube pause
+minikube unpause
+minikube start
+minikube dashboard
+>minikube addons enable ingress                                                           
+minikube tunnel  # start tnnel for ingress service
+kubectl get po -A
+
+# to access pod in host use below comand (because minikube runs inside vm that's why we were not able to acess its pods from host; for other kubernentes cluster it wil be different case)
+minikube service rabbitmq --url
+
+# export test=asd
+# echo $test
+asd
+
+
+kubectl apply -f ./ 
+kubectl config set-context --current --namespace=media-app
+kubectl exec -it nameofpod terminal_name
+
+open shell for contianer inside pod 
+kubectl exec -it ${POD_NAME} -c ${CONTAINER_NAME} -- ${CMD} ${ARG1} ${ARG2} ... ${ARGN}
+
+
+
+to make rabbit mq work first login to rabbit-mq-management.com and there create mp3 and vidoe queues
+
+https://www.manageengine.com/network-monitoring/how-to/how-to-add-static-entry.html#:~:text=Open%20your%20text%20editor%20in,the%20IP%20Address%20and%20hostname.&text=Save%20the%20changes.
+
+mongo shell commands
+mongosh -u mongoadmin -p secret
+show dbs;
+use db_name;
+show collections;
+db.comments.find().limit(2);

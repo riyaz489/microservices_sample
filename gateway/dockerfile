@@ -1,0 +1,15 @@
+FROM  python:3.10.9-slim-bullseye
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends --no-install-suggests\
+     build-essential libpq-dev python3-dev  \
+    && pip install --no-cache-dir --upgrade pip
+
+WORKDIR /app
+COPY ./requirements.txt /app
+RUN pip install --no-cache-dir --requirement /app/requirements.txt
+COPY . /app
+EXPOSE 8080
+ENV FLASK_APP=server:app
+ENV PYTHONPATH=.
+CMD ["gunicorn", "--bind=0.0.0.0:8080", "server:app", "--log-level=DEBUG", "--reload"]
